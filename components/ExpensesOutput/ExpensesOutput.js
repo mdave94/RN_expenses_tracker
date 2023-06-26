@@ -24,11 +24,6 @@ const DUMMY_EXPENSES = [
 ];
 
 function ExpensesOutput({ expenses, expensesPeriod }) {
-  console.log(
-    ">>>> ~ file: ExpensesOutput.js:27 ~ ExpensesOutput ~ expenses:",
-    expenses
-  );
-
   return (
     <>
       <View>

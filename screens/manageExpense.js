@@ -1,9 +1,13 @@
 import { View, Text, StyleSheet } from "react-native";
-import { useLayoutEffect } from "react";
+import { useContext, useLayoutEffect } from "react";
 import IconButton from "../components/UI/IconButton";
 import { GlobalStyles } from "../constants/style";
 import Button from "../components/UI/Button";
+import { ExpensesContext } from "../store/expenses-contect";
+
 function ManageExpense({ route, navigation }) {
+  // use ContextAPI
+  const expenseCtx = useContext(ExpensesContext);
   // ? is optional operator. If params is undefined expenseId wont used and the expression'll return undefined
   const editedExpenseId = route.params?.expenseId;
   //js version to convert data to boolian
@@ -17,6 +21,7 @@ function ManageExpense({ route, navigation }) {
   }, [navigation, isEditing]);
 
   function deleteExpressHandler() {
+    expenseCtx.deleteExpense(editedExpenseId);
     navigation.goBack();
   }
 

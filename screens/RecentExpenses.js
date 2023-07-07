@@ -16,7 +16,11 @@ function RecentExpenses() {
   });
 
   return (
-    <ExpensesOutput expenses={recentExpenses} expensesPeriod={"Last 7 Days"} />
+    <ExpensesOutput
+      fallbackText="There is no item left"
+      expenses={recentExpenses}
+      expensesPeriod={"Last 7 Days"}
+    />
   );
 }
 

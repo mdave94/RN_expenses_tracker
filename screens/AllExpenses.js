@@ -9,6 +9,7 @@ function AllExpenses() {
     <ExpensesOutput
       expenses={expeseContext.expenses}
       expensesPeriod={"Total"}
+      fallbackText="There is no item left"
     />
   );
 }

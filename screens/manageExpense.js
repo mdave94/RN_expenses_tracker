@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { useContext, useLayoutEffect } from "react";
 import IconButton from "../components/UI/IconButton";
 import { GlobalStyles } from "../constants/style";
@@ -12,6 +12,7 @@ function ManageExpense({ route, navigation }) {
   const editedExpenseId = route.params?.expenseId;
   //js version to convert data to boolian
   // true for editing false to not
+
   const isEditing = !!editedExpenseId;
 
   useLayoutEffect(() => {
@@ -30,6 +31,19 @@ function ManageExpense({ route, navigation }) {
   }
 
   function confirmHandler() {
+    if (isEditing) {
+      expenseCtx.updateExpense(editedExpenseId, {
+        description: "tes22t",
+        amount: 9239,
+        date: new Date("2023-12-07"),
+      });
+    } else {
+      expenseCtx.addExpense(editedExpenseId, {
+        description: "test",
+        amount: 99,
+        date: new Date("2023-07-07"),
+      });
+    }
     navigation.goBack();
   }
 

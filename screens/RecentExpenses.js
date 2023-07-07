@@ -11,14 +11,9 @@ function RecentExpenses() {
     const today = new Date();
 
     const lastSevenDays = getDateMinusDays(today, 7);
-    console.log(
-      ">>>> ~ file: RecentExpenses.js:14 ~ recentExpenses ~ lastSevenDays:",
-      lastSevenDays
-    );
 
-    return expense.date > lastSevenDays;
+    return expense.date >= lastSevenDays && expense.date <= today;
   });
-  console.log(recentExpenses);
 
   return (
     <ExpensesOutput expenses={recentExpenses} expensesPeriod={"Last 7 Days"} />

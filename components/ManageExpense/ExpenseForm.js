@@ -19,7 +19,16 @@ function ExpenseForm({ onCancel, onSubmit, submitButtonLabel }) {
     });
   }
 
-  function submitHandler(params) {}
+  function submitHandler(params) {
+    const expenseData = {
+      // + operator converts string to number
+      amount: +inputValues.amount,
+      date: new Date(inputValues.date),
+      description: inputValues.description,
+    };
+
+    onSubmit(expenseData);
+  }
 
   return (
     <View style={styles.form}>

@@ -18,8 +18,9 @@ export async function getExpenses() {
       id: key,
       amount: response.data[key].amount,
       date: new Date(response.data[key].date),
-      description: response[key].description,
+      description: response.data[key].description,
     };
+
     expenses.push(expenseObj);
   }
 

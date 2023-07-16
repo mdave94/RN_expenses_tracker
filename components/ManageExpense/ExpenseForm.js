@@ -3,6 +3,7 @@ import Input from "../ManageExpense/Input";
 import { useState } from "react";
 import Button from "../UI/Button";
 import { getFormattedDate } from "../../util/date";
+import { GlobalStyles } from "../../constants/style";
 
 function ExpenseForm({ onCancel, onSubmit, submitButtonLabel, defaultValues }) {
   const [inputs, setInputs] = useState({
@@ -70,6 +71,7 @@ function ExpenseForm({ onCancel, onSubmit, submitButtonLabel, defaultValues }) {
       <Text style={styles.title}> EXPENSES</Text>
       <View style={styles.inputContainer}>
         <Input
+          invalid={!inputs.amount.isValid}
           style={styles.rowInput}
           label={"Amount"}
           textInputConfig={{
@@ -79,6 +81,7 @@ function ExpenseForm({ onCancel, onSubmit, submitButtonLabel, defaultValues }) {
           }}
         />
         <Input
+          invalid={!inputs.date.isValid}
           style={styles.rowInput}
           label={"Date"}
           textInputConfig={{
@@ -90,6 +93,7 @@ function ExpenseForm({ onCancel, onSubmit, submitButtonLabel, defaultValues }) {
         />
       </View>
       <Input
+        invalid={!inputs.description.isValid}
         label={"Description"}
         textInputConfig={{
           multiline: true,
@@ -97,7 +101,7 @@ function ExpenseForm({ onCancel, onSubmit, submitButtonLabel, defaultValues }) {
           value: inputs.description.value,
         }}
       />
-      {formIsInvalid && <Text>Invalid inputs ! </Text>}
+      {formIsInvalid && <Text style={styles.errorText}>Invalid inputs ! </Text>}
       <View style={styles.buttonContainer}>
         <Button style={styles.button} mode="flat" onPress={onCancel}>
           Cancel
@@ -137,5 +141,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+  },
+  errorText: {
+    textAlign: "center",
+    color: GlobalStyles.colors.error500,
+    margin: 8,
   },
 });

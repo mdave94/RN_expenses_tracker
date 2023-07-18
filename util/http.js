@@ -4,8 +4,10 @@ const BACKEND_URL =
   "https://expense-tracker-rn-a78e6-default-rtdb.europe-west1.firebasedatabase.app";
 const EXPENSES_JSON = "/expenses.json";
 
-export function storeExpense(expenseData) {
-  axios.post(BACKEND_URL + EXPENSES_JSON, expenseData);
+export async function storeExpense(expenseData) {
+  const response = await axios.post(BACKEND_URL + EXPENSES_JSON, expenseData);
+  // name is the uniqe id from firebase
+  return response.data.name;
 }
 
 export async function getExpenses() {

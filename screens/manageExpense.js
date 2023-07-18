@@ -1,13 +1,15 @@
 import { View, StyleSheet, TextInput } from "react-native";
-import { useContext, useLayoutEffect } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import IconButton from "../components/UI/IconButton";
 import { GlobalStyles } from "../constants/style";
 import Button from "../components/UI/Button";
 import { ExpensesContext } from "../store/expenses-contect";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 import { deleteExpense, storeExpense, updateExpense } from "../util/http";
+import LoadingOverlay from "../components/UI/LoadingOverlay";
 
 function ManageExpense({ route, navigation }) {
+  const [isLoading, setIsLoading] = useState(false);
   // use ContextAPI
   const expenseCtx = useContext(ExpensesContext);
   // ? is optional operator. If params is undefined expenseId wont used and the expression'll return undefined
@@ -27,8 +29,10 @@ function ManageExpense({ route, navigation }) {
   }, [navigation, isEditing]);
 
   async function deleteExpressHandler() {
+    setIsLoading(true);
     expenseCtx.deleteExpense(editedExpenseId);
     await deleteExpense(editedExpenseId);
+
     navigation.goBack();
   }
 
@@ -38,6 +42,7 @@ function ManageExpense({ route, navigation }) {
 
   async function confirmHandler(expenseData) {
     if (isEditing) {
+      setIsLoading(true);
       expenseCtx.updateExpense(editedExpenseId, expenseData);
       await updateExpense(editedExpenseId, expenseData);
     } else {
@@ -45,7 +50,12 @@ function ManageExpense({ route, navigation }) {
       const id = await storeExpense(expenseData);
       expenseCtx.addExpense({ ...expenseData, id: id });
     }
+
     navigation.goBack();
+  }
+
+  if (isLoading) {
+    return <LoadingOverlay />;
   }
 
   return (

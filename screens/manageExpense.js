@@ -7,9 +7,11 @@ import { ExpensesContext } from "../store/expenses-contect";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 import { deleteExpense, storeExpense, updateExpense } from "../util/http";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
+import ErrorOverlay from "../components/UI/ErrorOverlay";
 
 function ManageExpense({ route, navigation }) {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
   // use ContextAPI
   const expenseCtx = useContext(ExpensesContext);
   // ? is optional operator. If params is undefined expenseId wont used and the expression'll return undefined
@@ -30,28 +32,48 @@ function ManageExpense({ route, navigation }) {
 
   async function deleteExpressHandler() {
     setIsLoading(true);
-    expenseCtx.deleteExpense(editedExpenseId);
-    await deleteExpense(editedExpenseId);
-
-    navigation.goBack();
+    try {
+      await deleteExpense(editedExpenseId);
+      expenseCtx.deleteExpense(editedExpenseId);
+      navigation.goBack();
+    } catch (error) {
+      setError("Something went wrong. Try again later !");
+      setIsLoading(false);
+    }
   }
 
   function cancelHandler() {
     navigation.goBack();
   }
 
+  function errorHandler() {
+    setError(null);
+  }
+
+  if (error && !isLoading) {
+    return <ErrorOverlay message={error} onConfirm={errorHandler} />;
+  }
+
   async function confirmHandler(expenseData) {
     if (isEditing) {
-      setIsLoading(true);
-      expenseCtx.updateExpense(editedExpenseId, expenseData);
-      await updateExpense(editedExpenseId, expenseData);
+      try {
+        setIsLoading(true);
+        expenseCtx.updateExpense(editedExpenseId, expenseData);
+        await updateExpense(editedExpenseId, expenseData);
+      } catch (error) {
+        setError("Something went wrong in update, try again later !");
+        setIsLoading(false);
+      }
     } else {
-      //order is important bc we need the id from firebase to store data in local
-      const id = await storeExpense(expenseData);
-      expenseCtx.addExpense({ ...expenseData, id: id });
+      try {
+        //order is important bc we need the id from firebase to store data in local
+        const id = await storeExpense(expenseData);
+        expenseCtx.addExpense({ ...expenseData, id: id });
+      } catch (error) {
+        setError("Something went wrong in creating, try again later !");
+        setIsLoading(false);
+      }
     }
-
-    navigation.goBack();
   }
 
   if (isLoading) {
